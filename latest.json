@@ -1,7 +1,7 @@
 {
-  "versionCode": 200,
-  "versionName": "2.0.0",
+  "versionCode": 201,
+  "versionName": "2.0.1",
   "apkUrl": "https://github.com/HazeM-i/limitless-attendance/releases/download/v2.0.0/app-release.apk",
   "forceUpdate": false,
-  "releaseNotes": "First production release of Limitless Attendance."
+  "releaseNotes": "Test OTA Update"
 }
