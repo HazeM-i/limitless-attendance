@@ -1,40 +1,256 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Limitless Attendance</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Limitless Attendance | Debug Solutions</title>
+  <meta name="description" content="Limitless Attendance is a professional attendance and field force management system with GPS attendance, visits, reports, live map, offline sync, and OTA updates." />
+  <style>
+    :root{
+      --bg:#070d1a;
+      --bg2:#0b1220;
+      --card:#121c31cc;
+      --card2:#17233dcc;
+      --border:#2b3f66;
+      --primary:#4f7cff;
+      --primary2:#60a5fa;
+      --success:#22c55e;
+      --warning:#f59e0b;
+      --danger:#ef4444;
+      --text:#ffffff;
+      --muted:#aab8d6;
+      --muted2:#7887a8;
+      --shadow:0 24px 80px rgba(0,0,0,.45);
+      --radius:28px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:Inter,Segoe UI,Arial,sans-serif;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(79,124,255,.24), transparent 35%),
+        radial-gradient(circle at 85% 20%, rgba(34,197,94,.13), transparent 30%),
+        radial-gradient(circle at 40% 90%, rgba(96,165,250,.16), transparent 40%),
+        linear-gradient(180deg,var(--bg),var(--bg2));
+      color:var(--text);
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{width:min(1180px,92%);margin:auto}
+    .nav{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter:blur(20px);
+      background:rgba(7,13,26,.76);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .nav-inner{height:76px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:.2px}
+    .logo{
+      width:46px;height:46px;border-radius:14px;background:#05070d;
+      display:grid;place-items:center;box-shadow:0 0 0 1px rgba(79,124,255,.35),0 0 32px rgba(79,124,255,.22)
+    }
+    .logo svg{width:30px;height:30px}
+    .nav-links{display:flex;gap:22px;color:var(--muted);font-size:14px}
+    .nav-links a:hover{color:#fff}
+    .nav-actions{display:flex;gap:10px;align-items:center}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      padding:14px 22px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.05);color:#fff;font-weight:800;
+      transition:.25s transform,.25s background,.25s border;
+      cursor:pointer;
+    }
+    .btn:hover{transform:translateY(-2px);background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.22)}
+    .btn.primary{background:linear-gradient(135deg,var(--primary),#2563eb);border:0;box-shadow:0 18px 45px rgba(79,124,255,.28)}
+    .btn.success{background:linear-gradient(135deg,var(--success),#16a34a);border:0;box-shadow:0 18px 45px rgba(34,197,94,.22)}
+    .hero{padding:86px 0 60px;position:relative}
+    .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center}
+    .badge{
+      display:inline-flex;gap:10px;align-items:center;padding:10px 14px;border-radius:999px;
+      background:rgba(79,124,255,.12);border:1px solid rgba(79,124,255,.35);color:#c9d6ff;font-weight:800;font-size:13px;
+      margin-bottom:22px
+    }
+    .pulse{width:9px;height:9px;background:var(--success);border-radius:50%;box-shadow:0 0 0 7px rgba(34,197,94,.13)}
+    h1{font-size:clamp(42px,6vw,78px);line-height:.98;letter-spacing:-2.5px;margin-bottom:22px}
+    .grad{background:linear-gradient(90deg,#fff,#a9c1ff,#5eead4);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .lead{font-size:clamp(18px,2vw,22px);line-height:1.7;color:var(--muted);max-width:680px;margin-bottom:30px}
+    .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:24px}
+    .meta{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted2);font-size:14px}
+    .meta span{display:flex;gap:8px;align-items:center}
+    .phone-stage{position:relative;min-height:630px;display:grid;place-items:center}
+    .phone-glow{position:absolute;width:420px;height:520px;background:radial-gradient(circle,rgba(79,124,255,.38),transparent 62%);filter:blur(20px)}
+    .phone{
+      position:relative;width:310px;min-height:620px;border-radius:42px;padding:18px;
+      background:linear-gradient(160deg,#101a2d,#060a12);box-shadow:var(--shadow), inset 0 0 0 2px rgba(255,255,255,.12);
+      transform:rotate(-4deg);
+    }
+    .screen{height:584px;border-radius:32px;background:linear-gradient(180deg,#0b1220,#08101e);padding:20px;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,.08)}
+    .screen:before{content:"";position:absolute;inset:-80px;background:radial-gradient(circle at 20% 20%,rgba(79,124,255,.22),transparent 28%),radial-gradient(circle at 90% 70%,rgba(34,197,94,.16),transparent 28%);pointer-events:none}
+    .screen-content{position:relative;z-index:1}
+    .mini-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;color:#dbe7ff;font-weight:800}
+    .mini-card{background:rgba(21,31,50,.78);border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:18px;margin-bottom:16px}
+    .mini-card h3{font-size:18px;margin-bottom:8px}
+    .mini-card p{color:var(--muted);font-size:13px;line-height:1.5}
+    .circle{margin:22px auto;width:180px;height:180px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#284785,#111c33 60%,#060b14);box-shadow:0 0 0 10px rgba(79,124,255,.13),0 0 45px rgba(79,124,255,.35);font-weight:900;font-size:24px;text-align:center}
+    .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.mini-stat{padding:14px;border-radius:18px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08);text-align:center}.mini-stat b{display:block;font-size:22px}.mini-stat small{color:var(--muted)}
+    section{padding:70px 0}.section-head{text-align:center;margin-bottom:38px}.section-head h2{font-size:clamp(30px,4vw,48px);margin-bottom:14px;letter-spacing:-1px}.section-head p{color:var(--muted);font-size:18px;max-width:760px;margin:auto;line-height:1.7}
+    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.feature{padding:26px;border-radius:var(--radius);background:var(--card);border:1px solid rgba(255,255,255,.09);box-shadow:0 18px 60px rgba(0,0,0,.22)}.icon{width:54px;height:54px;border-radius:18px;display:grid;place-items:center;background:rgba(79,124,255,.13);color:#a9c1ff;font-size:26px;margin-bottom:18px}.feature h3{font-size:20px;margin-bottom:10px}.feature p{color:var(--muted);line-height:1.65;font-size:15px}
+    .download{background:linear-gradient(135deg,rgba(79,124,255,.18),rgba(34,197,94,.09));border:1px solid rgba(255,255,255,.1);border-radius:36px;padding:42px;display:grid;grid-template-columns:1.2fr .8fr;gap:22px;align-items:center;box-shadow:var(--shadow)}
+    .download h2{font-size:40px;margin-bottom:12px}.download p{color:var(--muted);line-height:1.7;margin-bottom:22px}.version-box{background:rgba(7,13,26,.55);border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:24px}.version-row{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08);color:var(--muted)}.version-row:last-child{border-bottom:0}.version-row b{color:#fff}
+    .shots{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.shot{height:360px;border-radius:32px;background:linear-gradient(180deg,#111c31,#070d18);border:1px solid rgba(255,255,255,.1);padding:18px;position:relative;overflow:hidden}.shot:after{content:"";position:absolute;inset:auto -20% -30% -20%;height:180px;background:radial-gradient(circle,rgba(79,124,255,.24),transparent 65%)}.shot h3{position:relative;z-index:1;margin-top:12px}.fake-ui{position:relative;z-index:1;display:grid;gap:12px;margin-top:20px}.bar{height:48px;border-radius:16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08)}.bar.blue{background:rgba(79,124,255,.35)}.bar.green{background:rgba(34,197,94,.24)}.bar.orange{background:rgba(245,158,11,.24)}
+    .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.step{padding:24px;border-radius:24px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09)}.step b{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--primary);margin-bottom:16px}.step p{color:var(--muted);line-height:1.6}
+    footer{padding:42px 0;color:var(--muted2);border-top:1px solid rgba(255,255,255,.08);text-align:center}
+    .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#101827;border:1px solid rgba(255,255,255,.14);padding:12px 18px;border-radius:16px;color:#fff;box-shadow:var(--shadow);display:none;z-index:100}
+    @media(max-width:900px){.nav-links{display:none}.hero-grid,.download{grid-template-columns:1fr}.phone-stage{min-height:560px}.features,.shots,.steps{grid-template-columns:1fr}.download{padding:28px}.hero{padding-top:50px}.phone{transform:none;width:min(310px,92vw)}.nav-inner{height:68px}.brand span{font-size:14px}}
+  </style>
 </head>
-<body style="background:#0b1020;color:white;font-family:Arial;text-align:center;padding:80px;">
+<body>
+  <div class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top">
+        <span class="logo" aria-label="Limitless logo">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M28 68C14 68 6 58 6 50s8-18 22-18c15 0 27 18 44 36" stroke="#f59e0b" stroke-width="10" stroke-linecap="round"/><path d="M72 32c14 0 22 10 22 18s-8 18-22 18c-15 0-27-18-44-36" stroke="#f59e0b" stroke-width="10" stroke-linecap="round"/></svg>
+        </span>
+        <span>Limitless Attendance</span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#screens">Screens</a>
+        <a href="#download">Download</a>
+        <a href="#setup">Setup</a>
+      </div>
+      <div class="nav-actions">
+        <a class="btn" href="https://github.com/HazeM-i/limitless-attendance/releases" target="_blank">Releases</a>
+        <a class="btn primary" id="navDownload" href="https://github.com/HazeM-i/limitless-attendance/releases/latest/download/app-release.apk">Download</a>
+      </div>
+    </div>
+  </div>
 
-    <img src="https://raw.githubusercontent.com/HazeM-i/limitless-attendance/main/logo.png"
-         width="120"
-         onerror="this.style.display='none'">
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="badge"><span class="pulse"></span> OTA updates enabled • GitHub powered</div>
+          <h1>Attendance & Field Force Management, <span class="grad">without limits.</span></h1>
+          <p class="lead">A modern Android system for GPS attendance, field visits, live operations, leave requests, reports, Excel export, offline sync, and secure device control.</p>
+          <div class="hero-actions">
+            <a class="btn primary" id="heroDownload" href="https://github.com/HazeM-i/limitless-attendance/releases/latest/download/app-release.apk">⬇ Download APK</a>
+            <a class="btn" href="https://github.com/HazeM-i/limitless-attendance/releases/tag/v2.0.1" target="_blank">View v2.0.1</a>
+          </div>
+          <div class="meta">
+            <span>✅ Android APK</span><span>🔄 OTA Ready</span><span>🗺 OpenStreetMap</span><span>📊 Excel Reports</span>
+          </div>
+        </div>
+        <div class="phone-stage">
+          <div class="phone-glow"></div>
+          <div class="phone">
+            <div class="screen">
+              <div class="screen-content">
+                <div class="mini-top"><span>9:39</span><span>95%</span></div>
+                <div class="mini-card"><h3>Good morning, Hazem</h3><p>Wednesday, 8 July 2026 • 09:39 AM</p></div>
+                <div class="circle">Check<br/>Out</div>
+                <div class="mini-grid">
+                  <div class="mini-stat"><b>0</b><small>Visits Today</small></div>
+                  <div class="mini-stat"><b>Present</b><small>Status</small></div>
+                </div>
+                <div class="mini-card" style="margin-top:16px"><h3>GPS Ready</h3><p>Location enabled before actions</p></div>
+                <div class="mini-card"><h3>Sync Now</h3><p>Offline queue uploads actions with original time and location.</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <h1>Limitless Attendance</h1>
+    <section id="features">
+      <div class="wrap">
+        <div class="section-head"><h2>Built for real field teams</h2><p>Everything needed to manage employees, attendance, customers, visits, locations, reports, and updates from one product.</p></div>
+        <div class="features">
+          <div class="feature"><div class="icon">📍</div><h3>GPS Attendance</h3><p>Check in and check out with location validation, device data, and accurate work hour calculations.</p></div>
+          <div class="feature"><div class="icon">🚗</div><h3>Customer Visits</h3><p>Start and end visits, select customers from master data, track visit duration, and export visits separately.</p></div>
+          <div class="feature"><div class="icon">🗺</div><h3>Live Operations Map</h3><p>View employee status on OpenStreetMap with live location, present, visit, and offline indicators.</p></div>
+          <div class="feature"><div class="icon">📊</div><h3>Management Reports</h3><p>Daily-first reports with filters, department permissions, attendance summary, overtime, delays, and Excel export.</p></div>
+          <div class="feature"><div class="icon">🏢</div><h3>Master Data</h3><p>Admin-only departments and customers management, with CSV import and local cache for low Firestore usage.</p></div>
+          <div class="feature"><div class="icon">🔐</div><h3>Security</h3><p>Admin, manager, employee roles, device binding, GPS gate, and restricted department access for managers.</p></div>
+        </div>
+      </div>
+    </section>
 
-    <h3>Professional Attendance & Field Force Management</h3>
+    <section id="download">
+      <div class="wrap download">
+        <div>
+          <h2>Download the latest Android APK</h2>
+          <p>The download button points directly to the latest GitHub Release asset. Keep every new APK asset named <b>app-release.apk</b> and this button will always download the newest version automatically.</p>
+          <div class="hero-actions">
+            <a class="btn success" id="mainDownload" href="https://github.com/HazeM-i/limitless-attendance/releases/latest/download/app-release.apk">⬇ Direct APK Download</a>
+            <a class="btn" href="https://github.com/HazeM-i/limitless-attendance/releases" target="_blank">Release History</a>
+          </div>
+        </div>
+        <div class="version-box">
+          <div class="version-row"><span>Latest Version</span><b id="versionName">Loading...</b></div>
+          <div class="version-row"><span>Version Code</span><b id="versionCode">--</b></div>
+          <div class="version-row"><span>Force Update</span><b id="forceUpdate">--</b></div>
+          <div class="version-row"><span>APK Source</span><b>GitHub Releases</b></div>
+        </div>
+      </div>
+    </section>
 
-    <p>
-        GPS Attendance<br>
-        Field Visits<br>
-        Leave Management<br>
-        Offline Mode<br>
-        OTA Updates
-    </p>
+    <section id="screens">
+      <div class="wrap">
+        <div class="section-head"><h2>Professional mobile screens</h2><p>Dark theme, clear cards, operational dashboards, and Arabic/English user experience.</p></div>
+        <div class="shots">
+          <div class="shot"><h3>Employee Home</h3><div class="fake-ui"><div class="bar blue"></div><div class="bar"></div><div class="bar green"></div><div class="bar"></div></div></div>
+          <div class="shot"><h3>Reports Dashboard</h3><div class="fake-ui"><div class="bar orange"></div><div class="bar"></div><div class="bar blue"></div><div class="bar"></div><div class="bar green"></div></div></div>
+          <div class="shot"><h3>Live Map</h3><div class="fake-ui"><div class="bar green"></div><div class="bar blue"></div><div class="bar orange"></div><div class="bar"></div></div></div>
+        </div>
+      </div>
+    </section>
 
-    <br>
+    <section id="setup">
+      <div class="wrap">
+        <div class="section-head"><h2>How updates work</h2><p>Simple release workflow without Google Play.</p></div>
+        <div class="steps">
+          <div class="step"><b>1</b><h3>Build APK</h3><p>Increase versionCode and create a signed release APK.</p></div>
+          <div class="step"><b>2</b><h3>GitHub Release</h3><p>Create a new release and upload app-release.apk.</p></div>
+          <div class="step"><b>3</b><h3>Edit latest.json</h3><p>Update versionCode, versionName, apkUrl, and release notes.</p></div>
+          <div class="step"><b>4</b><h3>Users Update</h3><p>The app detects the new version and installs the APK.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-    <a href="https://github.com/HazeM-i/limitless-attendance/releases/latest"
-       style="
-       background:#4F7BFF;
-       color:white;
-       padding:18px 40px;
-       text-decoration:none;
-       border-radius:12px;
-       font-size:22px;">
-       Download APK
-    </a>
+  <footer>
+    <div class="wrap">© 2026 Debug Solutions — Limitless Attendance. Built for field workforce management.</div>
+  </footer>
+  <div class="toast" id="toast">Starting APK download...</div>
 
+  <script>
+    const latestJson = 'https://raw.githubusercontent.com/HazeM-i/limitless-attendance/refs/heads/main/latest.json';
+    const directApk = 'https://github.com/HazeM-i/limitless-attendance/releases/latest/download/app-release.apk';
+    document.querySelectorAll('#navDownload,#heroDownload,#mainDownload').forEach(btn=>{
+      btn.href = directApk;
+      btn.addEventListener('click',()=>{
+        const toast = document.getElementById('toast');
+        toast.style.display='block';
+        setTimeout(()=>toast.style.display='none',2600);
+      });
+    });
+    fetch(latestJson, {cache:'no-store'})
+      .then(r=>r.json())
+      .then(d=>{
+        document.getElementById('versionName').textContent = d.versionName || 'Latest';
+        document.getElementById('versionCode').textContent = d.versionCode || '--';
+        document.getElementById('forceUpdate').textContent = d.forceUpdate ? 'Yes' : 'No';
+        if(d.apkUrl){ document.querySelectorAll('#navDownload,#heroDownload,#mainDownload').forEach(btn=>btn.href=d.apkUrl); }
+      })
+      .catch(()=>{
+        document.getElementById('versionName').textContent = 'Latest';
+        document.getElementById('versionCode').textContent = '--';
+        document.getElementById('forceUpdate').textContent = '--';
+      });
+  </script>
 </body>
 </html>
+````
+
