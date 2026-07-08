@@ -4,253 +4,68 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Limitless Attendance | Debug Solutions</title>
-  <meta name="description" content="Limitless Attendance is a professional attendance and field force management system with GPS attendance, visits, reports, live map, offline sync, and OTA updates." />
+  <meta name="description" content="Limitless Attendance by Debug Solutions — professional attendance, field visits, live tracking, leave management, reports and OTA updates." />
   <style>
     :root{
-      --bg:#070d1a;
-      --bg2:#0b1220;
-      --card:#121c31cc;
-      --card2:#17233dcc;
-      --border:#2b3f66;
-      --primary:#4f7cff;
-      --primary2:#60a5fa;
-      --success:#22c55e;
-      --warning:#f59e0b;
-      --danger:#ef4444;
-      --text:#ffffff;
-      --muted:#aab8d6;
-      --muted2:#7887a8;
-      --shadow:0 24px 80px rgba(0,0,0,.45);
-      --radius:28px;
+      --bg:#070d1a;--bg2:#0b1220;--card:#121c31d9;--card2:#17233ddb;--border:#2b3f66;
+      --primary:#4f7cff;--primary2:#60a5fa;--success:#22c55e;--warning:#f59e0b;--danger:#ef4444;
+      --text:#fff;--muted:#aab8d6;--muted2:#7887a8;--radius:28px;--shadow:0 24px 80px rgba(0,0,0,.45)
     }
-    *{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
-    body{
-      font-family:Inter,Segoe UI,Arial,sans-serif;
-      background:
-        radial-gradient(circle at 15% 10%, rgba(79,124,255,.24), transparent 35%),
-        radial-gradient(circle at 85% 20%, rgba(34,197,94,.13), transparent 30%),
-        radial-gradient(circle at 40% 90%, rgba(96,165,250,.16), transparent 40%),
-        linear-gradient(180deg,var(--bg),var(--bg2));
-      color:var(--text);
-      min-height:100vh;
-      overflow-x:hidden;
-    }
-    a{color:inherit;text-decoration:none}
-    .wrap{width:min(1180px,92%);margin:auto}
-    .nav{
-      position:sticky;top:0;z-index:50;
-      backdrop-filter:blur(20px);
-      background:rgba(7,13,26,.76);
-      border-bottom:1px solid rgba(255,255,255,.08);
-    }
-    .nav-inner{height:76px;display:flex;align-items:center;justify-content:space-between;gap:18px}
-    .brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:.2px}
-    .logo{
-      width:46px;height:46px;border-radius:14px;background:#05070d;
-      display:grid;place-items:center;box-shadow:0 0 0 1px rgba(79,124,255,.35),0 0 32px rgba(79,124,255,.22)
-    }
-    .logo svg{width:30px;height:30px}
-    .nav-links{display:flex;gap:22px;color:var(--muted);font-size:14px}
-    .nav-links a:hover{color:#fff}
-    .nav-actions{display:flex;gap:10px;align-items:center}
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:10px;
-      padding:14px 22px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.05);color:#fff;font-weight:800;
-      transition:.25s transform,.25s background,.25s border;
-      cursor:pointer;
-    }
-    .btn:hover{transform:translateY(-2px);background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.22)}
-    .btn.primary{background:linear-gradient(135deg,var(--primary),#2563eb);border:0;box-shadow:0 18px 45px rgba(79,124,255,.28)}
-    .btn.success{background:linear-gradient(135deg,var(--success),#16a34a);border:0;box-shadow:0 18px 45px rgba(34,197,94,.22)}
-    .hero{padding:86px 0 60px;position:relative}
-    .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center}
-    .badge{
-      display:inline-flex;gap:10px;align-items:center;padding:10px 14px;border-radius:999px;
-      background:rgba(79,124,255,.12);border:1px solid rgba(79,124,255,.35);color:#c9d6ff;font-weight:800;font-size:13px;
-      margin-bottom:22px
-    }
-    .pulse{width:9px;height:9px;background:var(--success);border-radius:50%;box-shadow:0 0 0 7px rgba(34,197,94,.13)}
-    h1{font-size:clamp(42px,6vw,78px);line-height:.98;letter-spacing:-2.5px;margin-bottom:22px}
-    .grad{background:linear-gradient(90deg,#fff,#a9c1ff,#5eead4);-webkit-background-clip:text;background-clip:text;color:transparent}
-    .lead{font-size:clamp(18px,2vw,22px);line-height:1.7;color:var(--muted);max-width:680px;margin-bottom:30px}
-    .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:24px}
-    .meta{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted2);font-size:14px}
-    .meta span{display:flex;gap:8px;align-items:center}
-    .phone-stage{position:relative;min-height:630px;display:grid;place-items:center}
-    .phone-glow{position:absolute;width:420px;height:520px;background:radial-gradient(circle,rgba(79,124,255,.38),transparent 62%);filter:blur(20px)}
-    .phone{
-      position:relative;width:310px;min-height:620px;border-radius:42px;padding:18px;
-      background:linear-gradient(160deg,#101a2d,#060a12);box-shadow:var(--shadow), inset 0 0 0 2px rgba(255,255,255,.12);
-      transform:rotate(-4deg);
-    }
-    .screen{height:584px;border-radius:32px;background:linear-gradient(180deg,#0b1220,#08101e);padding:20px;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,.08)}
-    .screen:before{content:"";position:absolute;inset:-80px;background:radial-gradient(circle at 20% 20%,rgba(79,124,255,.22),transparent 28%),radial-gradient(circle at 90% 70%,rgba(34,197,94,.16),transparent 28%);pointer-events:none}
-    .screen-content{position:relative;z-index:1}
-    .mini-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;color:#dbe7ff;font-weight:800}
-    .mini-card{background:rgba(21,31,50,.78);border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:18px;margin-bottom:16px}
-    .mini-card h3{font-size:18px;margin-bottom:8px}
-    .mini-card p{color:var(--muted);font-size:13px;line-height:1.5}
-    .circle{margin:22px auto;width:180px;height:180px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#284785,#111c33 60%,#060b14);box-shadow:0 0 0 10px rgba(79,124,255,.13),0 0 45px rgba(79,124,255,.35);font-weight:900;font-size:24px;text-align:center}
-    .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.mini-stat{padding:14px;border-radius:18px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08);text-align:center}.mini-stat b{display:block;font-size:22px}.mini-stat small{color:var(--muted)}
-    section{padding:70px 0}.section-head{text-align:center;margin-bottom:38px}.section-head h2{font-size:clamp(30px,4vw,48px);margin-bottom:14px;letter-spacing:-1px}.section-head p{color:var(--muted);font-size:18px;max-width:760px;margin:auto;line-height:1.7}
-    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.feature{padding:26px;border-radius:var(--radius);background:var(--card);border:1px solid rgba(255,255,255,.09);box-shadow:0 18px 60px rgba(0,0,0,.22)}.icon{width:54px;height:54px;border-radius:18px;display:grid;place-items:center;background:rgba(79,124,255,.13);color:#a9c1ff;font-size:26px;margin-bottom:18px}.feature h3{font-size:20px;margin-bottom:10px}.feature p{color:var(--muted);line-height:1.65;font-size:15px}
-    .download{background:linear-gradient(135deg,rgba(79,124,255,.18),rgba(34,197,94,.09));border:1px solid rgba(255,255,255,.1);border-radius:36px;padding:42px;display:grid;grid-template-columns:1.2fr .8fr;gap:22px;align-items:center;box-shadow:var(--shadow)}
-    .download h2{font-size:40px;margin-bottom:12px}.download p{color:var(--muted);line-height:1.7;margin-bottom:22px}.version-box{background:rgba(7,13,26,.55);border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:24px}.version-row{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08);color:var(--muted)}.version-row:last-child{border-bottom:0}.version-row b{color:#fff}
-    .shots{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.shot{height:360px;border-radius:32px;background:linear-gradient(180deg,#111c31,#070d18);border:1px solid rgba(255,255,255,.1);padding:18px;position:relative;overflow:hidden}.shot:after{content:"";position:absolute;inset:auto -20% -30% -20%;height:180px;background:radial-gradient(circle,rgba(79,124,255,.24),transparent 65%)}.shot h3{position:relative;z-index:1;margin-top:12px}.fake-ui{position:relative;z-index:1;display:grid;gap:12px;margin-top:20px}.bar{height:48px;border-radius:16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08)}.bar.blue{background:rgba(79,124,255,.35)}.bar.green{background:rgba(34,197,94,.24)}.bar.orange{background:rgba(245,158,11,.24)}
-    .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.step{padding:24px;border-radius:24px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09)}.step b{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--primary);margin-bottom:16px}.step p{color:var(--muted);line-height:1.6}
-    footer{padding:42px 0;color:var(--muted2);border-top:1px solid rgba(255,255,255,.08);text-align:center}
-    .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#101827;border:1px solid rgba(255,255,255,.14);padding:12px 18px;border-radius:16px;color:#fff;box-shadow:var(--shadow);display:none;z-index:100}
-    @media(max-width:900px){.nav-links{display:none}.hero-grid,.download{grid-template-columns:1fr}.phone-stage{min-height:560px}.features,.shots,.steps{grid-template-columns:1fr}.download{padding:28px}.hero{padding-top:50px}.phone{transform:none;width:min(310px,92vw)}.nav-inner{height:68px}.brand span{font-size:14px}}
+    *{box-sizing:border-box;margin:0;padding:0} html{scroll-behavior:smooth} a{text-decoration:none;color:inherit}
+    body{font-family:Inter,Segoe UI,Tahoma,Arial,sans-serif;background:radial-gradient(circle at 12% 10%,rgba(79,124,255,.28),transparent 32%),radial-gradient(circle at 90% 18%,rgba(34,197,94,.14),transparent 31%),linear-gradient(180deg,var(--bg),var(--bg2));color:var(--text);min-height:100vh;overflow-x:hidden}
+    .wrap{width:min(1180px,92%);margin:auto}.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(18px);background:rgba(7,13,26,.72);border-bottom:1px solid rgba(255,255,255,.07)}
+    .navin{height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;align-items:center;gap:13px;font-weight:900}.logo{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#111827,#020617);display:grid;place-items:center;border:1px solid rgba(79,124,255,.45);box-shadow:0 0 30px rgba(79,124,255,.18)}.logo svg{width:30px;height:30px}.brand small{display:block;color:var(--muted);font-weight:600;margin-top:2px}.links{display:flex;gap:22px;align-items:center;color:var(--muted);font-weight:700}.links a:hover{color:white}.lang{border:1px solid var(--border);background:rgba(18,28,49,.72);color:white;padding:10px 14px;border-radius:999px;font-weight:800;cursor:pointer}
+    .hero{padding:82px 0 48px}.heroGrid{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center}.badge{display:inline-flex;gap:10px;align-items:center;border:1px solid rgba(79,124,255,.34);background:rgba(79,124,255,.12);color:#dbe7ff;padding:10px 14px;border-radius:999px;font-weight:800;margin-bottom:22px}.dot{width:9px;height:9px;border-radius:99px;background:var(--success);box-shadow:0 0 18px var(--success)}
+    h1{font-size:clamp(42px,7vw,82px);line-height:.98;letter-spacing:-3px;margin-bottom:22px}.grad{background:linear-gradient(90deg,#fff,#86a8ff,#60a5fa);-webkit-background-clip:text;background-clip:text;color:transparent}.lead{font-size:clamp(18px,2vw,24px);line-height:1.6;color:var(--muted);max-width:720px}.by{margin-top:20px;color:#d7e2ff;font-weight:800;line-height:1.7}.by span{color:var(--primary2)}
+    .actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:34px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 24px;border-radius:17px;font-weight:900;border:1px solid transparent;transition:.25s}.btn.primary{background:linear-gradient(135deg,var(--primary),#2563eb);box-shadow:0 18px 45px rgba(79,124,255,.35)}.btn.ghost{border-color:var(--border);background:rgba(18,28,49,.65);color:#dce7ff}.btn:hover{transform:translateY(-2px)}.meta{margin-top:16px;color:var(--muted2);font-size:14px}
+    .phone{position:relative;min-height:650px}.mock{width:min(360px,92%);margin:auto;background:linear-gradient(180deg,#101a2d,#08111f);border:1px solid rgba(255,255,255,.12);border-radius:42px;padding:18px;box-shadow:var(--shadow);position:relative}.screen{border-radius:32px;background:linear-gradient(180deg,#0b1220,#111d34);min-height:590px;padding:22px;overflow:hidden}.topline{display:flex;justify-content:space-between;align-items:center;color:#d8e4ff;font-weight:800}.circle{margin:34px auto 28px;width:190px;height:190px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#4f7cff55,#0b1220 62%);border:12px solid rgba(79,124,255,.3);box-shadow:inset 0 0 40px rgba(79,124,255,.35),0 0 35px rgba(79,124,255,.2);text-align:center;font-weight:900}.cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}.mini{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:16px}.mini b{font-size:22px}.timeline{margin-top:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:16px}.row{display:flex;gap:12px;align-items:flex-start;padding:10px 0;color:var(--muted)}.pin{width:28px;height:28px;border-radius:50%;background:var(--primary);display:grid;place-items:center;color:white;font-weight:900;flex:0 0 auto}.pin.green{background:var(--success)}.pin.orange{background:var(--warning)}
+    section{padding:58px 0}.sectionTitle{text-align:center;margin-bottom:32px}.sectionTitle h2{font-size:clamp(32px,4vw,54px);letter-spacing:-1.4px}.sectionTitle p{color:var(--muted);margin-top:12px;font-size:18px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.feature{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:26px;box-shadow:0 14px 45px rgba(0,0,0,.18)}.ico{width:52px;height:52px;border-radius:18px;display:grid;place-items:center;background:rgba(79,124,255,.14);border:1px solid rgba(79,124,255,.3);font-size:25px;margin-bottom:18px}.feature h3{font-size:22px;margin-bottom:10px}.feature p{color:var(--muted);line-height:1.6}.about{display:grid;grid-template-columns:1fr 1fr;gap:22px}.panel{background:linear-gradient(180deg,var(--card),rgba(10,18,33,.82));border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:30px;box-shadow:0 18px 60px rgba(0,0,0,.22)}.panel h3{font-size:28px;margin-bottom:14px}.panel p,.panel li{color:var(--muted);line-height:1.75}.list{list-style:none;margin-top:16px}.list li{padding:7px 0}.list li:before{content:'✓';color:var(--success);font-weight:900;margin-inline-end:10px}.clients{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}.client{padding:12px 16px;border-radius:999px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.08);color:#d8e4ff;font-weight:800}.download{background:linear-gradient(135deg,rgba(79,124,255,.16),rgba(34,197,94,.08));border:1px solid rgba(79,124,255,.26);border-radius:36px;padding:36px;text-align:center}.version{display:inline-flex;gap:8px;align-items:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:10px 14px;border-radius:999px;margin:16px 0;color:#d8e4ff;font-weight:900}footer{padding:34px 0;border-top:1px solid rgba(255,255,255,.08);color:var(--muted);text-align:center}
+    [dir="rtl"] body{font-family:Tajawal,Segoe UI,Tahoma,Arial,sans-serif}[dir="rtl"] h1{letter-spacing:-1px}.hide{display:none!important}
+    @media(max-width:900px){.heroGrid,.about{grid-template-columns:1fr}.phone{min-height:auto}.links{display:none}.grid{grid-template-columns:1fr}.hero{padding-top:42px}.mock{width:min(340px,100%)}.navin{height:68px}h1{letter-spacing:-1.6px}}
   </style>
 </head>
 <body>
-  <div class="nav">
-    <div class="wrap nav-inner">
-      <a class="brand" href="#top">
-        <span class="logo" aria-label="Limitless logo">
-          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M28 68C14 68 6 58 6 50s8-18 22-18c15 0 27 18 44 36" stroke="#f59e0b" stroke-width="10" stroke-linecap="round"/><path d="M72 32c14 0 22 10 22 18s-8 18-22 18c-15 0-27-18-44-36" stroke="#f59e0b" stroke-width="10" stroke-linecap="round"/></svg>
-        </span>
-        <span>Limitless Attendance</span>
-      </a>
-      <div class="nav-links">
-        <a href="#features">Features</a>
-        <a href="#screens">Screens</a>
-        <a href="#download">Download</a>
-        <a href="#setup">Setup</a>
-      </div>
-      <div class="nav-actions">
-        <a class="btn" href="https://github.com/HazeM-i/limitless-attendance/releases" target="_blank">Releases</a>
-        <a class="btn primary" id="navDownload" href="https://github.com/HazeM-i/limitless-attendance/releases/latest/download/app-release.apk">Download</a>
-      </div>
+  <nav class="nav"><div class="wrap navin">
+    <a class="brand" href="#top"><span class="logo" aria-label="Debug Solutions logo"><svg viewBox="0 0 64 64" fill="none"><path d="M16 32c8-16 24-16 32 0-8 16-24 16-32 0Z" stroke="#f59e0b" stroke-width="5"/><path d="M48 32C40 16 24 16 16 32c8 16 24 16 32 0Z" stroke="#f97316" stroke-width="5" opacity=".85"/></svg></span><span>Debug Solutions<small>Limitless Attendance</small></span></a>
+    <div class="links"><a href="#features" data-i18n="navFeatures">Features</a><a href="#about" data-i18n="navAbout">About</a><a href="#download" data-i18n="navDownload">Download</a><a href="#contact" data-i18n="navContact">Contact</a><button class="lang" id="langBtn">عربي</button></div>
+  </div></nav>
+
+  <main id="top" class="hero"><div class="wrap heroGrid">
+    <div><div class="badge"><span class="dot"></span><span data-i18n="badge">Enterprise Software by Debug Solutions</span></div>
+      <h1><span class="grad">Limitless Attendance</span><br><span data-i18n="headline">Attendance & Field Force Management</span></h1>
+      <p class="lead" data-i18n="lead">A professional Android solution for GPS attendance, customer visits, live operations, leave requests, reports, Excel export, offline sync and OTA updates.</p>
+      <div class="by" data-i18n-html="by">Developed by <span>Hazem Ibrahem</span><br>Founder of Debug Solutions • ERP & Digital Transformation Consultant</div>
+      <div class="actions"><a id="downloadTop" class="btn primary" href="https://github.com/HazeM-i/limitless-attendance/releases/latest/download/app-release.apk" download data-i18n="downloadBtn">Download Latest APK</a><a class="btn ghost" href="#features" data-i18n="exploreBtn">Explore Features</a></div>
+      <div class="meta"><span data-i18n="versionLabel">Current version</span>: <b id="versionName">Loading...</b> • <span data-i18n="directDownload">Direct APK download</span></div>
     </div>
-  </div>
+    <div class="phone"><div class="mock"><div class="screen"><div class="topline"><span>Limitless</span><span>09:00</span></div><div class="circle"><div><div style="font-size:34px">↦</div><div>Check In</div></div></div><div class="cards"><div class="mini"><span style="color:var(--muted)">Visits</span><br><b>12</b></div><div class="mini"><span style="color:var(--muted)">Status</span><br><b>Present</b></div></div><div class="timeline"><div class="row"><span class="pin green">1</span><div><b>Attendance</b><br>08:55 AM</div></div><div class="row"><span class="pin orange">2</span><div><b>Mina Visit</b><br>09:35 AM • Cairo</div></div><div class="row"><span class="pin">3</span><div><b>Management Report</b><br>Excel + Live Map</div></div></div></div></div></div>
+  </div></main>
 
-  <main id="top">
-    <section class="hero">
-      <div class="wrap hero-grid">
-        <div>
-          <div class="badge"><span class="pulse"></span> OTA updates enabled • GitHub powered</div>
-          <h1>Attendance & Field Force Management, <span class="grad">without limits.</span></h1>
-          <p class="lead">A modern Android system for GPS attendance, field visits, live operations, leave requests, reports, Excel export, offline sync, and secure device control.</p>
-          <div class="hero-actions">
-            <a class="btn primary" id="heroDownload" href="https://github.com/HazeM-i/limitless-attendance/releases/latest/download/app-release.apk">⬇ Download APK</a>
-            <a class="btn" href="https://github.com/HazeM-i/limitless-attendance/releases/tag/v2.0.1" target="_blank">View v2.0.1</a>
-          </div>
-          <div class="meta">
-            <span>✅ Android APK</span><span>🔄 OTA Ready</span><span>🗺 OpenStreetMap</span><span>📊 Excel Reports</span>
-          </div>
-        </div>
-        <div class="phone-stage">
-          <div class="phone-glow"></div>
-          <div class="phone">
-            <div class="screen">
-              <div class="screen-content">
-                <div class="mini-top"><span>9:39</span><span>95%</span></div>
-                <div class="mini-card"><h3>Good morning, Hazem</h3><p>Wednesday, 8 July 2026 • 09:39 AM</p></div>
-                <div class="circle">Check<br/>Out</div>
-                <div class="mini-grid">
-                  <div class="mini-stat"><b>0</b><small>Visits Today</small></div>
-                  <div class="mini-stat"><b>Present</b><small>Status</small></div>
-                </div>
-                <div class="mini-card" style="margin-top:16px"><h3>GPS Ready</h3><p>Location enabled before actions</p></div>
-                <div class="mini-card"><h3>Sync Now</h3><p>Offline queue uploads actions with original time and location.</p></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+  <section id="features"><div class="wrap"><div class="sectionTitle"><h2 data-i18n="featuresTitle">Built for real field teams</h2><p data-i18n="featuresSub">Everything HR, managers and field employees need in one system.</p></div><div class="grid">
+    <div class="feature"><div class="ico">📍</div><h3 data-i18n="f1">GPS Attendance</h3><p data-i18n="f1p">Check in and check out with time, location, device data and validation.</p></div>
+    <div class="feature"><div class="ico">🏢</div><h3 data-i18n="f2">Customer Visits</h3><p data-i18n="f2p">Start and end visits, track duration, customer, address and visit history.</p></div>
+    <div class="feature"><div class="ico">🗺️</div><h3 data-i18n="f3">Live Operations Map</h3><p data-i18n="f3p">Admin and managers can monitor live status and routes inside the app.</p></div>
+    <div class="feature"><div class="ico">📊</div><h3 data-i18n="f4">Management Reports</h3><p data-i18n="f4p">Daily reports, attendance, absence, overtime, late minutes and visits.</p></div>
+    <div class="feature"><div class="ico">📥</div><h3 data-i18n="f5">Excel Export</h3><p data-i18n="f5p">Professional Excel files for attendance, visits, departments and summaries.</p></div>
+    <div class="feature"><div class="ico">🔄</div><h3 data-i18n="f6">OTA Updates</h3><p data-i18n="f6p">Install updates directly from GitHub Releases without Google Play.</p></div>
+  </div></div></section>
 
-    <section id="features">
-      <div class="wrap">
-        <div class="section-head"><h2>Built for real field teams</h2><p>Everything needed to manage employees, attendance, customers, visits, locations, reports, and updates from one product.</p></div>
-        <div class="features">
-          <div class="feature"><div class="icon">📍</div><h3>GPS Attendance</h3><p>Check in and check out with location validation, device data, and accurate work hour calculations.</p></div>
-          <div class="feature"><div class="icon">🚗</div><h3>Customer Visits</h3><p>Start and end visits, select customers from master data, track visit duration, and export visits separately.</p></div>
-          <div class="feature"><div class="icon">🗺</div><h3>Live Operations Map</h3><p>View employee status on OpenStreetMap with live location, present, visit, and offline indicators.</p></div>
-          <div class="feature"><div class="icon">📊</div><h3>Management Reports</h3><p>Daily-first reports with filters, department permissions, attendance summary, overtime, delays, and Excel export.</p></div>
-          <div class="feature"><div class="icon">🏢</div><h3>Master Data</h3><p>Admin-only departments and customers management, with CSV import and local cache for low Firestore usage.</p></div>
-          <div class="feature"><div class="icon">🔐</div><h3>Security</h3><p>Admin, manager, employee roles, device binding, GPS gate, and restricted department access for managers.</p></div>
-        </div>
-      </div>
-    </section>
+  <section id="about"><div class="wrap about"><div class="panel"><h3 data-i18n="aboutDebug">About Debug Solutions</h3><p data-i18n="aboutDebugP">Debug Solutions builds ERP, Odoo, mobile applications and digital transformation solutions for companies in Egypt and Saudi Arabia.</p><ul class="list"><li>ERP & Odoo Development</li><li>Business Process Automation</li><li>Mobile Applications</li><li>Reporting & Analytics</li><li>Digital Transformation</li></ul></div><div class="panel"><h3 data-i18n="aboutHazem">Hazem Ibrahem</h3><p data-i18n="aboutHazemP">Founder of Debug Solutions, ERP consultant and information systems leader focused on practical business automation and field operations solutions.</p><ul class="list"><li>ERP Business Analysis</li><li>Odoo Implementation</li><li>Field Workforce Systems</li><li>Mobile & Web Product Design</li></ul></div></div></section>
 
-    <section id="download">
-      <div class="wrap download">
-        <div>
-          <h2>Download the latest Android APK</h2>
-          <p>The download button points directly to the latest GitHub Release asset. Keep every new APK asset named <b>app-release.apk</b> and this button will always download the newest version automatically.</p>
-          <div class="hero-actions">
-            <a class="btn success" id="mainDownload" href="https://github.com/HazeM-i/limitless-attendance/releases/latest/download/app-release.apk">⬇ Direct APK Download</a>
-            <a class="btn" href="https://github.com/HazeM-i/limitless-attendance/releases" target="_blank">Release History</a>
-          </div>
-        </div>
-        <div class="version-box">
-          <div class="version-row"><span>Latest Version</span><b id="versionName">Loading...</b></div>
-          <div class="version-row"><span>Version Code</span><b id="versionCode">--</b></div>
-          <div class="version-row"><span>Force Update</span><b id="forceUpdate">--</b></div>
-          <div class="version-row"><span>APK Source</span><b>GitHub Releases</b></div>
-        </div>
-      </div>
-    </section>
+  <section><div class="wrap"><div class="sectionTitle"><h2 data-i18n="clientsTitle">Experience across real businesses</h2><p data-i18n="clientsSub">Projects and implementations across retail, trading, engineering and services.</p></div><div class="clients"><span class="client">Ratomag</span><span class="client">Blend</span><span class="client">Fathallah Arms</span><span class="client">SHD BLD</span><span class="client">Steel Kitchen</span><span class="client">Alpha Omega</span><span class="client">El Eman Feed</span><span class="client">Premiar</span><span class="client">Amon Shoes</span></div></div></section>
 
-    <section id="screens">
-      <div class="wrap">
-        <div class="section-head"><h2>Professional mobile screens</h2><p>Dark theme, clear cards, operational dashboards, and Arabic/English user experience.</p></div>
-        <div class="shots">
-          <div class="shot"><h3>Employee Home</h3><div class="fake-ui"><div class="bar blue"></div><div class="bar"></div><div class="bar green"></div><div class="bar"></div></div></div>
-          <div class="shot"><h3>Reports Dashboard</h3><div class="fake-ui"><div class="bar orange"></div><div class="bar"></div><div class="bar blue"></div><div class="bar"></div><div class="bar green"></div></div></div>
-          <div class="shot"><h3>Live Map</h3><div class="fake-ui"><div class="bar green"></div><div class="bar blue"></div><div class="bar orange"></div><div class="bar"></div></div></div>
-        </div>
-      </div>
-    </section>
+  <section id="download"><div class="wrap"><div class="download"><h2 data-i18n="downloadTitle">Download Limitless Attendance</h2><p style="color:var(--muted);margin-top:10px" data-i18n="downloadSub">Get the latest Android APK directly. No Google Play required.</p><div class="version"><span data-i18n="versionLabel">Current version</span>: <span id="versionName2">Loading...</span></div><div class="actions" style="justify-content:center"><a id="downloadMain" class="btn primary" href="https://github.com/HazeM-i/limitless-attendance/releases/latest/download/app-release.apk" download data-i18n="downloadBtn">Download Latest APK</a><a class="btn ghost" href="https://github.com/HazeM-i/limitless-attendance/releases" target="_blank" data-i18n="releaseBtn">Release Notes</a></div><p id="notes" style="color:var(--muted);margin-top:18px;white-space:pre-line"></p></div></div></section>
 
-    <section id="setup">
-      <div class="wrap">
-        <div class="section-head"><h2>How updates work</h2><p>Simple release workflow without Google Play.</p></div>
-        <div class="steps">
-          <div class="step"><b>1</b><h3>Build APK</h3><p>Increase versionCode and create a signed release APK.</p></div>
-          <div class="step"><b>2</b><h3>GitHub Release</h3><p>Create a new release and upload app-release.apk.</p></div>
-          <div class="step"><b>3</b><h3>Edit latest.json</h3><p>Update versionCode, versionName, apkUrl, and release notes.</p></div>
-          <div class="step"><b>4</b><h3>Users Update</h3><p>The app detects the new version and installs the APK.</p></div>
-        </div>
-      </div>
-    </section>
-  </main>
+  <footer id="contact"><div class="wrap"><b>Debug Solutions</b> • <span data-i18n="footerBy">Developed by Hazem Ibrahem</span><br>© 2026 Debug Solutions. All rights reserved.</div></footer>
 
-  <footer>
-    <div class="wrap">© 2026 Debug Solutions — Limitless Attendance. Built for field workforce management.</div>
-  </footer>
-  <div class="toast" id="toast">Starting APK download...</div>
-
-  <script>
-    const latestJson = 'https://raw.githubusercontent.com/HazeM-i/limitless-attendance/refs/heads/main/latest.json';
-    const directApk = 'https://github.com/HazeM-i/limitless-attendance/releases/latest/download/app-release.apk';
-    document.querySelectorAll('#navDownload,#heroDownload,#mainDownload').forEach(btn=>{
-      btn.href = directApk;
-      btn.addEventListener('click',()=>{
-        const toast = document.getElementById('toast');
-        toast.style.display='block';
-        setTimeout(()=>toast.style.display='none',2600);
-      });
-    });
-    fetch(latestJson, {cache:'no-store'})
-      .then(r=>r.json())
-      .then(d=>{
-        document.getElementById('versionName').textContent = d.versionName || 'Latest';
-        document.getElementById('versionCode').textContent = d.versionCode || '--';
-        document.getElementById('forceUpdate').textContent = d.forceUpdate ? 'Yes' : 'No';
-        if(d.apkUrl){ document.querySelectorAll('#navDownload,#heroDownload,#mainDownload').forEach(btn=>btn.href=d.apkUrl); }
-      })
-      .catch(()=>{
-        document.getElementById('versionName').textContent = 'Latest';
-        document.getElementById('versionCode').textContent = '--';
-        document.getElementById('forceUpdate').textContent = '--';
-      });
-  </script>
+<script>
+  const latestUrl='https://raw.githubusercontent.com/HazeM-i/limitless-attendance/refs/heads/main/latest.json';
+  const directFallback='https://github.com/HazeM-i/limitless-attendance/releases/latest/download/app-release.apk';
+  fetch(latestUrl,{cache:'no-store'}).then(r=>r.json()).then(j=>{document.querySelectorAll('#versionName,#versionName2').forEach(e=>e.textContent=j.versionName||'Latest');document.querySelectorAll('#downloadTop,#downloadMain').forEach(a=>a.href=j.apkUrl||directFallback);document.getElementById('notes').textContent=j.releaseNotes||''}).catch(()=>{document.querySelectorAll('#versionName,#versionName2').forEach(e=>e.textContent='Latest')});
+  const t={ar:{navFeatures:'المميزات',navAbout:'عن الشركة',navDownload:'تحميل',navContact:'تواصل',badge:'برنامج احترافي من Debug Solutions',headline:'إدارة الحضور وفرق العمل الميدانية',lead:'حل أندرويد احترافي لتسجيل الحضور بالموقع، زيارات العملاء، الخريطة المباشرة، طلبات الإجازة، التقارير، تصدير Excel، العمل بدون إنترنت، والتحديثات التلقائية.',by:'تم التطوير بواسطة <span>Hazem Ibrahem</span><br>مؤسس Debug Solutions • استشاري ERP والتحول الرقمي',downloadBtn:'تحميل آخر APK',exploreBtn:'استعراض المميزات',versionLabel:'الإصدار الحالي',directDownload:'تحميل مباشر',featuresTitle:'مصمم لفرق العمل الحقيقية',featuresSub:'كل ما يحتاجه الموظف والمدير والإدارة في نظام واحد.',f1:'حضور بالموقع',f1p:'تسجيل حضور وانصراف مع الوقت والموقع وبيانات الجهاز والتحقق.',f2:'زيارات العملاء',f2p:'بدء وإنهاء الزيارة وتتبع المدة والعميل والعنوان والسجل.',f3:'خريطة مباشرة',f3p:'الأدمن والمدير يتابعون حالة الموظفين والمسارات داخل التطبيق.',f4:'تقارير الإدارة',f4p:'تقارير يومية للحضور والغياب والتأخير والأوفر تايم والزيارات.',f5:'تصدير Excel',f5p:'ملفات Excel منظمة للحضور والزيارات والإدارات والملخصات.',f6:'تحديثات تلقائية',f6p:'تثبيت التحديثات مباشرة من GitHub Releases بدون Google Play.',aboutDebug:'عن Debug Solutions',aboutDebugP:'Debug Solutions تقدم حلول ERP وOdoo وتطبيقات الموبايل والتحول الرقمي للشركات في مصر والسعودية.',aboutHazem:'Hazem Ibrahem',aboutHazemP:'مؤسس Debug Solutions، استشاري ERP وقائد نظم معلومات يركز على حلول أتمتة الأعمال والعمليات الميدانية.',clientsTitle:'خبرة مع شركات حقيقية',clientsSub:'مشروعات وتنفيذات في مجالات التجارة والتجزئة والهندسة والخدمات.',downloadTitle:'تحميل Limitless Attendance',downloadSub:'حمّل آخر نسخة Android APK مباشرة بدون Google Play.',releaseBtn:'سجل التحديثات',footerBy:'تم التطوير بواسطة Hazem Ibrahem'},en:{}};
+  const btn=document.getElementById('langBtn');let lang='en';btn.onclick=()=>{lang=lang==='en'?'ar':'en';document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';btn.textContent=lang==='ar'?'English':'عربي';document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;if(t[lang][k])el.textContent=t[lang][k]});document.querySelectorAll('[data-i18n-html]').forEach(el=>{const k=el.dataset.i18nHtml;if(t[lang][k])el.innerHTML=t[lang][k]})};
+</script>
 </body>
 </html>
-````
+
 
