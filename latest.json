@@ -1,7 +1,7 @@
 {
-  "versionCode": 202,
-  "versionName": "2.0.2",
+  "versionCode": 203,
+  "versionName": "2.0.3",
   "apkUrl": "https://github.com/HazeM-i/limitless-attendance/releases/download/v2.0.2/app-release.apk",
   "forceUpdate": false,
-  "releaseNotes": "Fix Gradle properties, company subscription updates, and general improvements."
+  "releaseNotes": "New additional features."
 }
