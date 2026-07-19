@@ -1,7 +1,7 @@
 {
-  "versionCode": 202,
-  "versionName": "2.0.2",
-  "apkUrl": "https://github.com/HazeM-i/limitless-attendance/releases/download/v2.0.3/app-release.apk",
+  "versionCode": 208,
+  "versionName": "2.0.8",
+  "apkUrl": "https://github.com/HazeM-i/limitless-attendance/releases/download/v2.0.8/app-release.apk",
   "forceUpdate": false,
-  "releaseNotes": "New additional features."
+  "releaseNotes": "Super Admin Dashboard, subscription control, billing, push notifications, secure password reset, security and offline improvements."
 }
